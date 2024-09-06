@@ -6,20 +6,32 @@ using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.UI.WebControls;
 using WebApplication1.Models;
+using WebApplication1.Models.Service;
 
 namespace WebApplication1.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
+        [AllowAnonymous]
         public ActionResult Login()
         {
             return View();
         }
 
+
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult Login(LoginVm formData)
         {
-            if (FormsAuthentication.Authenticate(formData.Account, formData.Password))
+            if(ModelState.IsValid==false)
+            {
+                return View(formData);
+            }
+
+
+            var service = new UserService();
+            if (service.IsVaild(formData.Account, formData.Password))
             {
                 FormsAuthentication.RedirectFromLoginPage(formData.Account, false);
 
@@ -30,7 +42,14 @@ namespace WebApplication1.Controllers
                 ModelState.AddModelError(string.Empty, "帳號或密碼有誤");
                 return View();
             }
+        }
 
+        public ActionResult Logout()
+        {
+            Session.Abandon();
+            FormsAuthentication.SignOut();
+
+            return RedirectToAction("Login");
         }
 
 
@@ -39,6 +58,7 @@ namespace WebApplication1.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

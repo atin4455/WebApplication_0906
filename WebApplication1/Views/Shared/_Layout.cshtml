@@ -21,7 +21,22 @@
                     <li>@Html.ActionLink("首頁", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("關於", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("連絡人", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("第1頁", "Index", "Page2", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("第2頁", "Index2", "Page2", new { area = "" }, new { @class = "nav-link" })</li>
                 </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a href="#">Hi @(User.Identity.Name)</a></li>
+                        <li><a href="/Home/Logout/">登出</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="/Home/Login/">登入</a></li>
+                    }
+                </ul>
+
             </div>
         </div>
     </nav>
